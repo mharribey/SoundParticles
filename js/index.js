@@ -4,10 +4,10 @@ let ctx = canvas.getContext('2d')
 
 let start = document.getElementById('start')
 let title = document.getElementById('title')
-let credits = document.getElementById('credits')
-credits.innerHTML = 'Le temps est bon - Bon Entendeur x Isabelle Pierre'
 let duration = document.getElementById('duration')
 let songs = document.getElementById('selector')
+let credits = document.getElementById('credits')
+credits.innerHTML = 'Le temps est bon - Bon Entendeur x Isabelle Pierre'
 
 // init
 canvas.style.width = window.innerWidth
@@ -21,6 +21,7 @@ let CENTER_X = canvas.width / 2
 let CENTER_Y = canvas.height / 2
 
 // var
+let play = true
 let particles = []
 let fbc_array = []
 let list_of_freq = [329, 354, 389, 400, 458, 500, 560, 589, 640, 700, 808]
@@ -41,6 +42,7 @@ let mouse = {
   x: 0,
   y: 0
 }
+let audio = null
 let biquadFilter = null
 let contextAudio = null
 let music = 'sound.mp3'
@@ -54,7 +56,7 @@ function initShapes(frequences, centerX, centerY) {
   let NUMBER_CIRCLES = 10
   let NUMBER_PARTICLES = 30
 
-  let diff = 30 + frequences[707] / 8 // edit frequences[x] according to the level of the music
+  let diff = 28 + frequences[707] / 8 // edit frequences[x] according to the level of the music
 
   for (let i = 1; i < NUMBER_CIRCLES; i++) {
     for (let k = 0; k < 2; k++) {
@@ -116,16 +118,16 @@ function randomParticles() {
 }
 
 function initAudio() {
-  var audio = new Audio()
+  audio = new Audio()
   audio.src = `${music}`
+  audio.controls = true
   audio.loop = false
   audio.autoplay = true
-  audio.load()
 
   audio.addEventListener('loadedmetadata', function() {
     setInterval(function() {
       duration.style.width = dur + '%'
-      if (dur <= 99.8) {
+      if (dur <= 99.8 && play) {
         dur += 1 / audio.duration // 1/2secondesa
       } else {
         canvas.classList.toggle('display-none')
@@ -166,7 +168,6 @@ function animate() {
 
 // run
 start.addEventListener('click', () => {
-  console.log(credits)
   start.style.animation = 'fadeOut 2s forwards'
   title.style.animation = 'fadeOut 1s forwards'
   songs.style.animation = 'fadeOut 1s forwards'
