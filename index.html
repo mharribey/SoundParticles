@@ -11,12 +11,21 @@
 
     <div class="container">
       <canvas id="canvas" class="display-none" style="z-index:2"></canvas>
-      <div class="">
+      <div>
         <h1 id="title"> NUIT D'ETE </h1>
+        <select id="selector" name="select-sound" onchange="choseSong(this.value)">
+          <option value="sound.mp3">Le temps est bon - Bon Entendeur x Isabelle Pierre</option>
+          <option value="sound3.mp3">La Piscine - Hypnolove</option>
+          <option value="sound4.mp3">Nanã - Polo & Pan</option>
+          <option value="sound5.mp3">I want to hold your hand - The Beatles</option>
+          <option value="sound6.mp3">Juicy - The Notorious B.I.G</option>
+
+        </select>
         <div id="start">
           <p>start</p>
         </div>
       </div>
+      <p id="credits" class="display-none"></p>
     </div>
 
 

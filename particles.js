@@ -7,16 +7,16 @@ class Particle {
   }
 
   update(frequence) {
-    this.radius = frequence / 10
+    this.radius = frequence / 11
   }
 
-  draw(ctx, frequence, stroke) {
-    const randomColor = this.colors[getRandomInt(5)]
+  draw(ctx, frequence, stroke, number) {
+    const color = number < 10 ? this.colors[number] : this.colors[1]
     this.update(frequence)
 
     ctx.beginPath()
-    ctx.fillStyle = randomColor
-    ctx.strokeStyle = randomColor
+    ctx.fillStyle = color
+    ctx.strokeStyle = color
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
     if (stroke == true) {
       ctx.stroke()

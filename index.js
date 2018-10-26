@@ -4,8 +4,10 @@ let ctx = canvas.getContext('2d')
 
 let start = document.getElementById('start')
 let title = document.getElementById('title')
-// let bg = document.getElementById('bg')
+let credits = document.getElementById('credits')
+credits.innerHTML = 'Le temps est bon - Bon Entendeur x Isabelle Pierre'
 let duration = document.getElementById('duration')
+let songs = document.getElementById('selector')
 
 // init
 canvas.style.width = window.innerWidth
@@ -21,7 +23,8 @@ let CENTER_Y = canvas.height / 2
 // var
 let particles = []
 let fbc_array = []
-let list_of_freq = [808, 700, 640, 589, 560, 500, 458, 400, 389, 354, 329]
+let list_of_freq = [329, 354, 389, 400, 458, 500, 560, 589, 640, 700, 808]
+// let list_of_freq = [808, 700, 640, 589, 560, 500, 458, 400, 389, 354, 329]
 let COLORS = [
   '#F0C5CE',
   '#BDD2B9',
@@ -40,12 +43,18 @@ let mouse = {
 }
 let biquadFilter = null
 let contextAudio = null
+let music = 'sound.mp3'
+
+function choseSong(value) {
+  credits.innerHTML = songs[songs.selectedIndex].innerHTML
+  music = value
+}
 
 function initShapes(frequences, centerX, centerY) {
   let NUMBER_CIRCLES = 10
   let NUMBER_PARTICLES = 30
 
-  let diff = 30 + frequences[808] / 8
+  let diff = 30 + frequences[707] / 8 // edit frequences[x] according to the level of the music
 
   for (let i = 1; i < NUMBER_CIRCLES; i++) {
     for (let k = 0; k < 2; k++) {
@@ -58,12 +67,11 @@ function initShapes(frequences, centerX, centerY) {
       const freq = frequences[list_of_freq[NUMBER_CIRCLES - i]]
       for (let j = 1; j <= NUMBER_PARTICLES; j++) {
         let angle = 2 * Math.PI * j / NUMBER_PARTICLES
-
         let x = CENTER_X + Math.cos(angle) * radius
         let y = CENTER_Y + Math.sin(angle) * radius
 
         let circle = new Particle(x, y, COLORS)
-        circle.draw(ctx, freq, stroke)
+        circle.draw(ctx, freq, stroke, i)
       }
     }
   }
@@ -85,9 +93,9 @@ function randomShapes(frequences) {
 }
 
 function enableFilter() {
-  biquadFilter.type = 'lowshelf'
-  biquadFilter.frequency.setValueAtTime(mouse.x, contextAudio.currentTime)
-  biquadFilter.gain.setValueAtTime(mouse.y / 20, contextAudio.currentTime)
+  biquadFilter.type = 'lowpass'
+  biquadFilter.frequency.setValueAtTime(mouse.x * 2, contextAudio.currentTime)
+  biquadFilter.gain.setValueAtTime(mouse.y / 12, contextAudio.currentTime)
 }
 
 function randomParticles() {
@@ -109,7 +117,7 @@ function randomParticles() {
 
 function initAudio() {
   var audio = new Audio()
-  audio.src = 'sound.mp3'
+  audio.src = `${music}`
   audio.loop = false
   audio.autoplay = true
   audio.load()
@@ -147,7 +155,7 @@ function animate() {
   initShapes(fbc_array, CENTER_X, CENTER_Y)
   randomShapes(fbc_array)
 
-  if (fbc_array[800] > 80 && particles.length < 100) {
+  if (fbc_array[707] > 80 && particles.length < 80) {
     particles.push(new movingParticle(canvasWidth, canvasHeight))
   }
 
@@ -158,12 +166,16 @@ function animate() {
 
 // run
 start.addEventListener('click', () => {
+  console.log(credits)
   start.style.animation = 'fadeOut 2s forwards'
   title.style.animation = 'fadeOut 1s forwards'
+  songs.style.animation = 'fadeOut 1s forwards'
   setTimeout(() => {
     start.remove()
     title.remove()
+    songs.remove()
     canvas.classList.toggle('display-none')
+    credits.classList.toggle('display-none')
     initAudio()
   }, 2000)
 })

@@ -2,8 +2,8 @@ class movingParticle {
   constructor(canvasWidth, canvasHeight) {
     this.x = getRandomInt(canvasWidth) + 1
     this.y = getRandomInt(canvasHeight) + 1
-    this.vx = getRandomInt(3) + 1
-    this.vy = getRandomInt(3) + 1
+    this.vx = getRandomInt(2) == 1 ? -getRandomInt(3) - 1 : getRandomInt(3) + 1
+    this.vy = getRandomInt(2) == 1 ? -getRandomInt(3) - 1 : getRandomInt(3) + 1
 
     this.position = vec2.fromValues(this.x, this.y)
     this.direction = vec2.fromValues(this.vx, this.vy)
@@ -27,7 +27,7 @@ class movingParticle {
     this.update()
 
     ctx.save()
-    ctx.fillStyle = `rgba(${colors[getRandomInt(9)]},0.6`
+    ctx.fillStyle = `rgba(${colors[getRandomInt(9)]},0.6)`
     ctx.translate(this.position[0], this.position[1])
     ctx.beginPath()
     ctx.arc(0, 0, frequences[808] / 8, 0, Math.PI * 2)
